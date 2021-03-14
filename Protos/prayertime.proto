@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "GRPC1";
+
+package prayertime;
+
+service prayertime{
+	rpc GetPrayerTimesByCity(RequestForPrayerTimesInCity) returns (ResponseForPrayerTimesInCity);
+}
+
+message RequestForPrayerTimesInCity{
+	string city = 1;
+	string school = 2;
+}
+
+message ResponseForPrayerTimesInCity{
+	string Fajr = 1;
+	string Dhuhr = 2;
+	string Asr = 3;
+	string Maghrib = 4;
+	string Isha = 5;
+}
