@@ -2,10 +2,13 @@ syntax = "proto3";
 
 option csharp_namespace = "GRPC1";
 
+import "google/protobuf/timestamp.proto";
+
 package prayertime;
 
 service prayertime{
 	rpc GetPrayerTimesByCity(RequestForPrayerTimesInCity) returns (ResponseForPrayerTimesInCity);
+	rpc GetPrayerTimesByCityStream(RequestForPrayerTimesInCity) returns (stream ResponseForPrayerTimesInCity);
 }
 
 message RequestForPrayerTimesInCity{
@@ -19,4 +22,5 @@ message ResponseForPrayerTimesInCity{
 	string Asr = 3;
 	string Maghrib = 4;
 	string Isha = 5;
+	google.protobuf.Timestamp TimeStamp= 6;
 }
