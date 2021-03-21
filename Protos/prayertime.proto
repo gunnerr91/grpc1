@@ -6,14 +6,31 @@ import "google/protobuf/timestamp.proto";
 
 package prayertime;
 
+enum SchoolType {
+	Ithna_Ashari = 0;
+	University_of_Islamic_Sciences_Karachi = 1;
+	Islamic_Society_of_North_America = 2;
+	Muslim_World_League = 3; 
+	Umm_Al_Qura_University_Mecca = 4; 
+	Egyptian_General_Authority_of_Survey = 5;
+}
+
 service prayertime{
 	rpc GetPrayerTimesByCity(RequestForPrayerTimesInCity) returns (ResponseForPrayerTimesInCity);
+	rpc GetPrayerTimesByCityAndSchool(RequestForPrayerTimesInCityAndSchool) returns (ResponseForPrayerTimesInCityAndSchool);
 	rpc GetPrayerTimesByCityStream(RequestForPrayerTimesInCity) returns (stream ResponseForPrayerTimesInCity);
+	rpc GetPrayerTimesByCityAndSchoolStream(RequestForPrayerTimesInCityAndSchool) returns (stream ResponseForPrayerTimesInCityAndSchool);
+	rpc GetMultplePrayerTimesBasedOnCity(stream RequestForPrayerTimesInCity) returns(ResponseForPrayerTimesForMultipleCities);
+	rpc GetMultplePrayerTimesBasedOnCityAndSchool(stream RequestForPrayerTimesInCityAndSchool) returns(ResponseForPrayerTimesForMultipleCitiesAndSchools);
 }
 
 message RequestForPrayerTimesInCity{
 	string city = 1;
-	string school = 2;
+}
+
+message RequestForPrayerTimesInCityAndSchool{
+	string city = 1;
+	SchoolType school = 2;
 }
 
 message ResponseForPrayerTimesInCity{
@@ -23,4 +40,25 @@ message ResponseForPrayerTimesInCity{
 	string Maghrib = 4;
 	string Isha = 5;
 	google.protobuf.Timestamp TimeStamp= 6;
+	string City = 7;
 }
+
+message ResponseForPrayerTimesInCityAndSchool{
+	string Fajr = 1;
+	string Dhuhr = 2;
+	string Asr = 3;
+	string Maghrib = 4;
+	string Isha = 5;
+	google.protobuf.Timestamp TimeStamp= 6;
+	string City = 7;
+	SchoolType School = 8;
+}
+
+message ResponseForPrayerTimesForMultipleCities{
+	repeated ResponseForPrayerTimesInCity prayerTimes = 1;
+}
+
+message ResponseForPrayerTimesForMultipleCitiesAndSchools{
+	repeated ResponseForPrayerTimesInCityAndSchool prayerTimes = 1;
+}
+
