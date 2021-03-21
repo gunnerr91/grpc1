@@ -3,17 +3,9 @@ syntax = "proto3";
 option csharp_namespace = "GRPC1";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 package prayertime;
-
-enum SchoolType {
-	Ithna_Ashari = 0;
-	University_of_Islamic_Sciences_Karachi = 1;
-	Islamic_Society_of_North_America = 2;
-	Muslim_World_League = 3; 
-	Umm_Al_Qura_University_Mecca = 4; 
-	Egyptian_General_Authority_of_Survey = 5;
-}
 
 service prayertime{
 	rpc GetPrayerTimesByCity(RequestForPrayerTimesInCity) returns (ResponseForPrayerTimesInCity);
@@ -22,6 +14,11 @@ service prayertime{
 	rpc GetPrayerTimesByCityAndSchoolStream(RequestForPrayerTimesInCityAndSchool) returns (stream ResponseForPrayerTimesInCityAndSchool);
 	rpc GetMultplePrayerTimesBasedOnCity(stream RequestForPrayerTimesInCity) returns(ResponseForPrayerTimesForMultipleCities);
 	rpc GetMultplePrayerTimesBasedOnCityAndSchool(stream RequestForPrayerTimesInCityAndSchool) returns(ResponseForPrayerTimesForMultipleCitiesAndSchools);
+	rpc PrintStream (stream PrintRequest) returns (google.protobuf.Empty);
+}
+
+message PrintRequest{
+	string message = 1;
 }
 
 message RequestForPrayerTimesInCity{
@@ -30,7 +27,7 @@ message RequestForPrayerTimesInCity{
 
 message RequestForPrayerTimesInCityAndSchool{
 	string city = 1;
-	SchoolType school = 2;
+	string school = 2;
 }
 
 message ResponseForPrayerTimesInCity{
@@ -51,7 +48,7 @@ message ResponseForPrayerTimesInCityAndSchool{
 	string Isha = 5;
 	google.protobuf.Timestamp TimeStamp= 6;
 	string City = 7;
-	SchoolType School = 8;
+	string School = 8;
 }
 
 message ResponseForPrayerTimesForMultipleCities{

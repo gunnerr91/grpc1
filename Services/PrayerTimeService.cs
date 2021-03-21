@@ -19,6 +19,21 @@ namespace GRPC1
             this.logger = logger;
         }
 
+        //just an example of empty
+        public override async Task<Empty> PrintStream(
+            IAsyncStreamReader<PrintRequest> requestStream, 
+            ServerCallContext context)
+        {
+            var client = httpClientFactory.CreateClient();
+
+            await foreach (var request in requestStream.ReadAllAsync())
+            {
+                logger.LogInformation("message details: " + request.Message);
+            }
+
+            return new();
+        }
+
         public override async Task<ResponseForPrayerTimesInCity> GetPrayerTimesByCity(
             RequestForPrayerTimesInCity request,
             ServerCallContext context)
@@ -183,7 +198,7 @@ namespace GRPC1
 
         private static async Task<PrayerTimes> GetPrayerTimesWithSchool(RequestForPrayerTimesInCityAndSchool request, HttpClient client)
         {
-            var response = await client.GetStringAsync($"https://api.pray.zone/v2/times/today.json?city={request.City}&school={(int)request.School}");
+            var response = await client.GetStringAsync($"https://api.pray.zone/v2/times/today.json?city={request.City}&school={request.School}");
 
             var prayerTimes = PrayerTimes.FromJson(response);
             return prayerTimes;
